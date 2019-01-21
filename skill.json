@@ -14,8 +14,8 @@
           ],
           "name": "Time-Spent",
           "description": "Sample Full Description",
-          "smallIconUri": "https://s3.amazonaws.com/cdn.dabblelab.com/img/skill-template-default-sm.png",
-          "largeIconUri": "https://s3.amazonaws.com/cdn.dabblelab.com/img/skill-template-default-lg.png"
+          "smallIconUri": "https://s3.amazonaws.com/bryanc21/icon_108_A2Z.png",
+          "largeIconUri": "https://s3.amazonaws.com/bryanc21/icon_512_A2Z.png"
         }
       },
       "isAvailableWorldwide": true,
@@ -27,7 +27,12 @@
       "custom": {
         "endpoint": {
           "sourceDir": "lambda/custom"
-        }
+        },
+        "interfaces": [
+          {
+            "type": "ALEXA_PRESENTATION_APL"
+          }
+        ]
       }
     },
     "manifestVersion": "1.0",

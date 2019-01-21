@@ -3,6 +3,7 @@
 
 const Alexa = require('ask-sdk');
 const dbHelper = require('./helpers/dbHelper');
+const main = require('./main.json');
 const GENERAL_REPROMPT = "What would you like to do? Add Task, Remove Task, Update Task, List Tasks or Reset All Tasks";
 const dynamoDBTableName = "TimeSpent";
 const LaunchRequestHandler = {
@@ -13,10 +14,23 @@ const LaunchRequestHandler = {
     const speechText = 'Hello there. Welcome to Time Spent. Just say HELP for a list of things you can do.';
     const repromptText = 'What would you like to do? You can say HELP to get available options';
 
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .reprompt(repromptText)
-      .getResponse();
+    if(supportsDisplay(handlerInput)) {
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(repromptText)
+        .addDirective({
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          version: '1.0',
+          document: main,
+          datasources: {}
+        })
+        .getResponse();
+    } else {
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(repromptText)
+        .getResponse();
+    }
   },
 };
 
@@ -78,7 +92,7 @@ const GetTasksIntentHandler = {
         if (data.length == 0) {
           speechText = "You do not have any tasks yet, add a task by saying add"
         } else {
-          speechText += data.map(e => e.Task +" with "+ e.Attribute1 +" minutes.").join(", ")
+          speechText += data.map(e => e.Task +" with "+ e.Attribute1 +" minutes").join(", ")
         }
         return responseBuilder
           .speak(speechText)
@@ -87,6 +101,36 @@ const GetTasksIntentHandler = {
       })
       .catch((err) => {
         const speechText = "we cannot get your tasks right now. Try again!"
+        return responseBuilder
+          .speak(speechText)
+          .getResponse();
+      })
+  }
+}
+
+const RemoveAllTasksIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'RemoveAllTasksIntent';
+  },
+  async handle(handlerInput) {
+    const {responseBuilder } = handlerInput;
+    const userID = handlerInput.requestEnvelope.context.System.user.userId; 
+    return dbHelper.getSummary(userID)
+      .then((data) => {
+        var speechText = "All your data has been cleared. Add some new tasks by saying add"
+        if (data.length == 0) {
+          speechText = "You do not have any tasks yet, add a task by saying add"
+        } else {
+          data.map(e => dbHelper.removeTask(e.Task, userID))
+        }
+        return responseBuilder
+          .speak(speechText)
+          .reprompt(GENERAL_REPROMPT)
+          .getResponse();
+      })
+      .catch((err) => {
+        const speechText = "we cannot remove all your tasks right now. Try again!"
         return responseBuilder
           .speak(speechText)
           .getResponse();
@@ -192,6 +236,16 @@ const ErrorHandler = {
   },
 };
 
+function supportsDisplay(handlerInput) {
+  return handlerInput.requestEnvelope.context != undefined &&
+    handlerInput.requestEnvelope.context.System != undefined &&
+    handlerInput.requestEnvelope.context.System.device != undefined &&
+    handlerInput.requestEnvelope.context.System.device.supportedInterfaces != undefined &&
+    (handlerInput.requestEnvelope.context.System.device.supportedInterfaces['Alexa.Presentation.APL'] != undefined ||
+    handlerInput.requestEnvelope.context.System.device.supportedInterfaces.Display != undefined) &&
+    handlerInput.requestEnvelope.context.Viewport != undefined;
+}
+
 const skillBuilder = Alexa.SkillBuilders.standard();
 
 exports.handler = skillBuilder
@@ -202,6 +256,7 @@ exports.handler = skillBuilder
     GetTasksIntentHandler,
     InProgressRemoveTaskIntentHandler,
     RemoveTaskIntentHandler,
+    RemoveAllTasksIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler

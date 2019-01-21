@@ -39,6 +39,13 @@
                     ]
                 },
                 {
+                    "name": "RemoveAllTasksIntent",
+                    "slots": [],
+                    "samples": [
+                        "remove all tasks"
+                    ]
+                },
+                {
                     "name": "RemoveTaskIntent",
                     "slots": [
                         {

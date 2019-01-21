@@ -30,29 +30,6 @@ dbHelper.prototype.updateTime = (task, userID) => {
     });
 }
 
-
-/*dbHelper.prototype.addTask = (movie, userID) => {
-    return new Promise((resolve, reject) => {
-        const params = {
-            TableName: tableName,
-            Item: {
-              'Task' : movie,
-              'userId': userID,
-              'Attribute1' : "Hello"
-            }
-        };
-        docClient.put(params, (err, data) => {
-            if (err) {
-                console.log("Unable to insert =>", JSON.stringify(err))
-                return reject("Unable to insert");
-            }
-            console.log("Saved Data, ", JSON.stringify(data));
-            resolve(data);
-        });
-    });
-}*/
-
-
 dbHelper.prototype.getSummary = (userID) => {
     return new Promise((resolve, reject) => {
         const params = {
@@ -63,6 +40,32 @@ dbHelper.prototype.getSummary = (userID) => {
             },
             ExpressionAttributeValues: {
                 ":user_id": userID
+            }
+        }
+        docClient.query(params, (err, data) => {
+            if (err) {
+                console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                return reject(JSON.stringify(err, null, 2))
+            } 
+            console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+            resolve(data.Items)
+            
+        })
+    });
+}
+
+dbHelper.prototype.getTask = (task, userID) => {
+    return new Promise((resolve, reject) => {
+        const params = {
+            TableName: tableName,
+            KeyConditionExpression: "#userID = :user_id and #Task = :task",
+            ExpressionAttributeNames: {
+                "#userID": "userId",
+                "#Task": "Task"
+            },
+            ExpressionAttributeValues: {
+                ":user_id": userID,
+                ":task": task
             }
         }
         docClient.query(params, (err, data) => {
