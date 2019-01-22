@@ -5,7 +5,7 @@ const tableName = "TimeSpent";
 var dbHelper = function () { };
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-dbHelper.prototype.updateTime = (task, userID) => {
+dbHelper.prototype.updateTime = (task, minutes, userID) => {
     return new Promise((resolve, reject) => {
         const params = {
             TableName: tableName,
@@ -14,9 +14,9 @@ dbHelper.prototype.updateTime = (task, userID) => {
                 "Task": task
             },
             UpdateExpression: 'set #a = :x',
-            ExpressionAttributeNames: {'#a' : 'Attribute1'},
+            ExpressionAttributeNames: {'#a' : 'Time'},
             ExpressionAttributeValues: {
-                ':x' : 'pikachu'
+                ':x' : minutes
             }
         };
         docClient.update(params, (err, data) => {
@@ -54,7 +54,7 @@ dbHelper.prototype.getSummary = (userID) => {
     });
 }
 
-dbHelper.prototype.getTask = (task, userID) => {
+dbHelper.prototype.getTime = (task, userID) => {
     return new Promise((resolve, reject) => {
         const params = {
             TableName: tableName,

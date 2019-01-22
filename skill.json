@@ -3,24 +3,30 @@
     "publishingInformation": {
       "locales": {
         "en-US": {
-          "summary": "Sample Short Description",
+          "summary": "Time Spent is a skill that allows you to record how much time you have spent on a specific task.",
           "examplePhrases": [
-            "Alexa open dynamodb starter"
+            "Alexa open time spent",
+            "add time to taskname",
+            "list my tasks"
           ],
           "keywords": [
-            "keyword1",
-            "keyword2",
-            "keyword3"
+            "time",
+            "record",
+            "productivity",
+            "habit",
+            "exercise",
+            "hobbie",
+            "tracker"
           ],
-          "name": "Time-Spent",
-          "description": "Sample Full Description",
+          "name": "Time Spent",
+          "description": "Time Spent is a skill that allows you to record how much time you have spent on a specific task. Whether you want to keep track of how much time you have spent exercising this week or how much time you have spent watching TV, Time spent can keep track of it all and easily tell you that information whenever you need it. You can say add to add a task with a certain amount of time. You can also use add to add more time to an already existing task. Ask time spent to list your tasks and times or ask time spent to remove any tasks from your list.",
           "smallIconUri": "https://s3.amazonaws.com/bryanc21/icon_108_A2Z.png",
           "largeIconUri": "https://s3.amazonaws.com/bryanc21/icon_512_A2Z.png"
         }
       },
       "isAvailableWorldwide": true,
       "testingInstructions": "No special instructions.",
-      "category": "EDUCATION_AND_REFERENCE",
+      "category": "TO_DO_LISTS_AND_NOTES",
       "distributionCountries": []
     },
     "apis": {
@@ -40,8 +46,7 @@
       "allowsPurchases": false,
       "locales": {
         "en-US": {
-          "termsOfUseUrl": "http://dabblelab.com/terms",
-          "privacyPolicyUrl": "http://dabblelab.com/privacy"
+        
         }
       },
       "isExportCompliant": true,

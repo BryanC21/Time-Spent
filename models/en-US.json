@@ -24,10 +24,21 @@
                             "samples": [
                                 "{Task}"
                             ]
+                        },
+                        {
+                            "name": "Time",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "{Time} minutes",
+                                "{Time}"
+                            ]
                         }
                     ],
                     "samples": [
-                        "add {Task}",
+                        "add {Task} with {Time} minutes",
+                        "add {Time} to {Task}",
+                        "add {Time} minutes to {Task}",
+                        "add {Task}  {Time}",
                         "add"
                     ]
                 },
@@ -35,13 +46,18 @@
                     "name": "GetTasksIntent",
                     "slots": [],
                     "samples": [
-                        "get my tasks"
+                        "get my tasks",
+                        "get summary",
+                        "get tasks",
+                        "tell me my tasks",
+                        "list my tasks"
                     ]
                 },
                 {
                     "name": "RemoveAllTasksIntent",
                     "slots": [],
                     "samples": [
+                        "reset all tasks",
                         "remove all tasks"
                     ]
                 },
@@ -66,7 +82,28 @@
                     "samples": []
                 }
             ],
-            "types": []
+            "types": [
+                {
+                    "name": "AMAZON.EventType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "working out"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "watching t v"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "watching TV"
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         "dialog": {
             "intents": [
@@ -82,6 +119,15 @@
                             "elicitationRequired": true,
                             "prompts": {
                                 "elicitation": "Elicit.Slot.932310416052.1004645578092"
+                            }
+                        },
+                        {
+                            "name": "Time",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.564610769376.538573365653"
                             }
                         }
                     ]
@@ -111,7 +157,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Which task would you like to add "
+                        "value": "Which task would you like to add?"
                     }
                 ]
             },
@@ -120,7 +166,16 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Which task would you like to remove "
+                        "value": "Which task would you like to remove?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.564610769376.538573365653",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "How much time are you adding to this task in minutes?"
                     }
                 ]
             }
