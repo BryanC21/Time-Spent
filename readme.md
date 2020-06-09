@@ -1,7 +1,6 @@
 # Time Spent
 
-![Icon]
-(https://s3.amazonaws.com/bryanc21/icon_512_A2Z.png)
+![Icon](https://s3.amazonaws.com/bryanc21/icon_512_A2Z.png)
 
 An Alexa skill that allows user to track how much time they are spending on different tasks.
 
